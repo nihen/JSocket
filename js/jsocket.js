@@ -1,3 +1,10 @@
+/*
+ * Jsocket
+ * Author: Masahiro Chiba <nihen@megabbs.com>
+ * Depends:
+ *  - jQuery: http://jquery.com/
+ *  - jQuery TOOLS - Flashembed: http://flowplayer.org/tools/flashembed.html
+ * */
 function JSocket() {
     this.initialize.apply(this, arguments);
 }
