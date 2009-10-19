@@ -12,9 +12,10 @@
  *         closeHandler:   closeHandler,
  *         errorHandler:   errorHandler
  *     });
+ *     socket.connect(location.hostname, location.port || 80);
  *  });
  *  function connectHandler() {
- *      socket.write('hoge');
+ *      socket.write("GET / HTTP/1.0\x0D\x0A\x0D\x0A");
  *      socket.flush();
  *  }
  *  function dataHandler(data) {
