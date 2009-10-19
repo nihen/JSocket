@@ -10,6 +10,7 @@ package {
     {
         private var sockets:Array = new Array();
         private var handlers:Object;
+        private var escapeReg:RegExp = /\\/g;
 
         public function JSocket():void {
             if (stage) init();
@@ -66,11 +67,11 @@ package {
         private function dataHandler(event:Event, socid:int):void {
             var soc:Socket = sockets[socid];
             var buffer:String = soc.readUTFBytes(soc.bytesAvailable);
-            ExternalInterface.call('JSocket.handler', socid, 'dataHandler', buffer.replace('\\', '\\\\'));
+            ExternalInterface.call('JSocket.handler', socid, 'dataHandler', buffer.replace(escapeReg, '\\\\'));
         }
 
         private function errorHandler(event:Event, socid:int):void {
-            ExternalInterface.call('JSocket.handler', socid, 'errorHandler', event.toString().replace('\\', '\\\\'));
+            ExternalInterface.call('JSocket.handler', socid, 'errorHandler', event.toString().replace(escapeReg, '\\\\'));
         }
     }
 }
