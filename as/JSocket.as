@@ -66,11 +66,11 @@ package {
         private function dataHandler(event:Event, socid:int):void {
             var soc:Socket = sockets[socid];
             var buffer:String = soc.readUTFBytes(soc.bytesAvailable);
-            ExternalInterface.call('JSocket.handler', socid, 'dataHandler', buffer);
+            ExternalInterface.call('JSocket.handler', socid, 'dataHandler', buffer.replace('\\', '\\\\'));
         }
 
         private function errorHandler(event:Event, socid:int):void {
-            ExternalInterface.call('JSocket.handler', socid, 'errorHandler', event.toString());
+            ExternalInterface.call('JSocket.handler', socid, 'errorHandler', event.toString().replace('\\', '\\\\'));
         }
     }
 }
