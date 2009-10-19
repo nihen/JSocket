@@ -1,9 +1,36 @@
 /*
- * Jsocket
+ * Jsocket - Socket on Javascript
  * Author: Masahiro Chiba <nihen@megabbs.com>
  * Depends:
  *  - jQuery: http://jquery.com/
  *  - jQuery TOOLS - Flashembed: http://flowplayer.org/tools/flashembed.html
+ * SYNOPSIS:
+ *  JSocket.init('/static/JSocket.swf', function () {
+ *     socket = new JSocket({
+ *         connectHandler: connectHandler,
+ *         dataHandler:    dataHandler,
+ *         closeHandler:   closeHandler,
+ *         errorHandler:   errorHandler
+ *     });
+ *     socket.write('hoge');
+ *     socket.flush();
+ *     socket.close();
+ *  });
+ *  function connectHandler() {
+ *      socket.write('hoge');
+ *      socket.flush();
+ *  }
+ *  function dataHandler(data) {
+ *      alert(data);
+ *      socket.close();
+ *  }
+ *  function closeHandler() {
+ *      alert('lost connection')
+ *  }
+ *  function errorHandler(errorstr) {
+ *      alert(errorstr);
+ *  }
+ *  
  * */
 function JSocket() {
     this.initialize.apply(this, arguments);
@@ -27,10 +54,21 @@ JSocket.swfloaded = function() {
         JSocket.swfloadedcb();
     }
 };
+JSocket.handlers = new Array();
+JSocket.handler = function(socid, handlename) {
+    if ( JSocket.handlers[socid][handlename] ) {
+        if ( arguments.length == 3 ) {
+            JSocket.handlers[socid][handlename](arguments[2]);
+        }
+        else {
+            JSocket.handlers[socid][handlename]();
+        }
+    }
+};
 JSocket.prototype = {
     initialize: function(handlers) {
-        this.handlers = handlers;
-        this.socid    = JSocket.flashapi.newsocket(handlers);
+        this.socid    = JSocket.flashapi.newsocket();
+        JSocket.handlers[this.socid] = handlers;
     },
     connect: function(host, port) {
         JSocket.flashapi.connect(this.socid, host, port);

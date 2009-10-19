@@ -28,17 +28,19 @@ package {
             ExternalInterface.call('JSocket.swfloaded');
         }
 
-        public function newsocket(handlers:Object):int {
+        public function newsocket():int {
             var soc:Socket = new Socket();
 
-            soc.addEventListener(Event.CONNECT,                     function (e:Event):void { connectHandler(e, soc, handlers.connectHandler) });
-            soc.addEventListener(ProgressEvent.SOCKET_DATA,         function (e:Event):void { dataHandler(e, soc, handlers.dataHandler) } );
-            soc.addEventListener(Event.CLOSE,                       function (e:Event):void { closeHandler(e, soc, handlers.closeHandler); } );
-            soc.addEventListener(IOErrorEvent.IO_ERROR,             function (e:Event):void { errorHandler(e, soc, handlers.errorHandler); } );
-            soc.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (e:Event):void { errorHandler(e, soc, handlers.errorHandler); } );
-
             sockets.push(soc);
-            return sockets.length - 1;
+            var socid:int = sockets.length - 1;
+
+            soc.addEventListener(Event.CONNECT,                     function (e:Event):void { connectHandler(e, socid) });
+            soc.addEventListener(ProgressEvent.SOCKET_DATA,         function (e:Event):void { dataHandler(e, socid) } );
+            soc.addEventListener(Event.CLOSE,                       function (e:Event):void { closeHandler(e, socid); } );
+            soc.addEventListener(IOErrorEvent.IO_ERROR,             function (e:Event):void { errorHandler(e, socid); } );
+            soc.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (e:Event):void { errorHandler(e, socid); } );
+
+            return socid;
         }
 
         public function connect(socid:int, host:String, port:int):void {
@@ -54,29 +56,21 @@ package {
             sockets[socid].close();
         }
 
-        private function connectHandler(event:Event, soc:Socket, handler:String):void {
-            if ( handler ) {
-                ExternalInterface.call(handler);
-            }
+        private function connectHandler(event:Event, socid:int):void {
+            ExternalInterface.call('JSocket.handler', socid, 'connectHandler');
         }
-        private function closeHandler(event:Event, soc:Socket, handler:String):void {
-            if ( handler ) {
-                ExternalInterface.call(handler);
-            }
+        private function closeHandler(event:Event, socid:int):void {
+            ExternalInterface.call('JSocket.handler', socid, 'closeHandler');
         }
 
-        private function dataHandler(event:Event, soc:Socket, handler:String):void {
+        private function dataHandler(event:Event, socid:int):void {
+            var soc:Socket = sockets[socid];
             var buffer:String = soc.readUTFBytes(soc.bytesAvailable);
-            if ( handler ) {
-                ExternalInterface.call(handler, buffer);
-            }
+            ExternalInterface.call('JSocket.handler', socid, 'dataHandler', buffer);
         }
 
-        private function errorHandler(event:Event, soc:Socket, handler:String):void {
-            if ( handler ) {
-                ExternalInterface.call(handler, event.toString());
-            }
+        private function errorHandler(event:Event, socid:int):void {
+            ExternalInterface.call('JSocket.handler', socid, 'errorHandler', event.toString());
         }
-
     }
 }
