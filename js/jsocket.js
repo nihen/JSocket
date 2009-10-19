@@ -12,9 +12,6 @@
  *         closeHandler:   closeHandler,
  *         errorHandler:   errorHandler
  *     });
- *     socket.write('hoge');
- *     socket.flush();
- *     socket.close();
  *  });
  *  function connectHandler() {
  *      socket.write('hoge');
