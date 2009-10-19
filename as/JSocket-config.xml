@@ -1,13 +1,13 @@
 <flex-config>
     <target-player>9.0.124</target-player>
-    <output>JSocket.swf</output>
+    <output>../swf/JSocket.swf</output>
     <default-size>
         <width>1</width>
         <height>1</height>
     </default-size>
     <compiler>
         <source-path>
-            <path-element>../swf/</path-element>
+            <path-element>../as/</path-element>
         </source-path>
     </compiler>
 </flex-config>
