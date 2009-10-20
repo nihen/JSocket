@@ -1,0 +1,41 @@
+NAME
+    JSocket - Socket on Javascript
+
+INSTALLATION
+    copy ./js/jsocket.js and ./swf/JSocket.swf to under docroot
+
+SYNOPSIS
+    1. run flashpolicyd(http://www.adobe.com/devnet/flashplayer/articles/socket_policy_files.html)
+    2. in html
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery-tools.flashembed.js"></script>
+    <script src="/js/jsocket.js"></script>
+    <script>
+        JSocket.init('/static/JSocket.swf', function () {
+           socket = new JSocket({
+               connectHandler: connectHandler,
+               dataHandler:    dataHandler,
+               closeHandler:   closeHandler,
+               errorHandler:   errorHandler
+           });
+           socket.connect(location.hostname, location.port || 80);
+        });
+        function connectHandler() {
+            socket.writeFlush("GET / HTTP/1.0\x0D\x0A");
+            socket.write("Host: " + location.hostname + "\x0D\x0A\x0D\x0A");
+            socket.flush();
+        }
+        function dataHandler(data) {
+            alert(data);
+            socket.close();
+        }
+        function closeHandler() {
+            alert('lost connection')
+        }
+        function errorHandler(errorstr) {
+            alert(errorstr);
+        }
+    </script>
+
+AUTHOR
+    Masahiro Chiba<nihen@megabbs.com>

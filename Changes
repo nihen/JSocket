@@ -1,0 +1,11 @@
+Revision history for JSocket
+
+0.03    Tue Oct 20 16:10:55 2009
+        - add writeFlush()
+        - optimize code
+
+0.02    Mon Oct  19 00:00:00 2009
+        - change api
+
+0.01    Sun Oct  18 00:00:00 2009
+        - original version
