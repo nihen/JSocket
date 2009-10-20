@@ -15,7 +15,8 @@
  *     socket.connect(location.hostname, location.port || 80);
  *  });
  *  function connectHandler() {
- *      socket.write("GET / HTTP/1.0\x0D\x0A\x0D\x0A");
+ *      socket.writeFlush("GET / HTTP/1.0\x0D\x0A");
+ *      socket.write("Host: " + location.hostname + "\x0D\x0A\x0D\x0A");
  *      socket.flush();
  *  }
  *  function dataHandler(data) {
@@ -33,7 +34,7 @@
 function JSocket() {
     this.initialize.apply(this, arguments);
 }
-JSocket.VERSION = '0.02';
+JSocket.VERSION = '0.03';
 JSocket.init = function(src, swfloadedcb) {
     JSocket.flashapi = $('<div></div>').appendTo('body').flashembed({
         id: 'socketswf',
@@ -54,26 +55,37 @@ JSocket.swfloaded = function() {
     }
 };
 JSocket.handlers = new Array();
-JSocket.handler = function(socid, handlename) {
-    if ( JSocket.handlers[socid][handlename] ) {
-        if ( arguments.length == 3 ) {
-            JSocket.handlers[socid][handlename](arguments[2]);
-        }
-        else {
-            JSocket.handlers[socid][handlename]();
-        }
-    }
+JSocket.defaultHandlers = {
+    connectHandler: function () {},
+    dataHandler: function () {},
+    closeHandler: function () {},
+    errorHandler: function () {}
+};
+JSocket.connectHandler = function(socid) {
+    JSocket.handlers[socid].connectHandler();
+};
+JSocket.dataHandler = function(socid, data) {
+    JSocket.handlers[socid].dataHandler(data);
+};
+JSocket.closeHandler = function(socid) {
+    JSocket.handlers[socid].closeHandler();
+};
+JSocket.errorHandler = function(socid, str) {
+    JSocket.handlers[socid].errorHandler(str);
 };
 JSocket.prototype = {
     initialize: function(handlers) {
         this.socid    = JSocket.flashapi.newsocket();
-        JSocket.handlers[this.socid] = handlers;
+        JSocket.handlers[this.socid] = $.extend(JSocket.defaultHandlers.prototype, handlers);
     },
     connect: function(host, port) {
         JSocket.flashapi.connect(this.socid, host, port);
     },
     write: function(data) {
        JSocket.flashapi.write(this.socid, data);
+    },
+    writeFlush: function(data) {
+       JSocket.flashapi.writeFlush(this.socid, data);
     },
     close: function() {
         JSocket.flashapi.close(this.socid);
