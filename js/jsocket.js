@@ -34,9 +34,9 @@
 function JSocket() {
     this.initialize.apply(this, arguments);
 }
-JSocket.VERSION = '0.03';
+JSocket.VERSION = '0.04';
 JSocket.init = function(src, swfloadedcb) {
-    JSocket.flashapi = $('<div></div>').prependTo('body').flashembed({
+    JSocket.flashapi = $('<div id="swfsocketdiv"></div>').prependTo('body').flashembed({
         id: 'socketswf',
         name: 'socketswf',
         src: src.concat('?'.concat(JSocket.VERSION)),
@@ -47,7 +47,14 @@ JSocket.init = function(src, swfloadedcb) {
         bgcolor: '#ffffff',
         allowScriptAccess: 'always'
     }).data('flashembed').getApi();
-    JSocket.swfloadedcb = swfloadedcb;
+
+    if ( JSocket.flashapi.newsocket ) {
+        // for IE(because already construct)
+        swfloadedcb();
+    }
+    else {
+        JSocket.swfloadedcb = swfloadedcb;
+    }
 };
 JSocket.swfloaded = function() {
     if ( JSocket.swfloadedcb ) {

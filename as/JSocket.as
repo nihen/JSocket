@@ -14,13 +14,6 @@ package {
         private static var handlers:Object;
 
         public function JSocket():void {
-            if (stage) init();
-            else addEventListener(Event.ADDED_TO_STAGE, init);
-        }
-        
-        private function init(e:Event = null):void {
-            removeEventListener(Event.ADDED_TO_STAGE, init);
-
             ExternalInterface.addCallback('newsocket', newsocket);
             ExternalInterface.addCallback('connect', connect);
             ExternalInterface.addCallback('write', write);
