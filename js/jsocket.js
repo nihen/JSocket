@@ -46,7 +46,7 @@ JSocket.init = function(src, swfloadedcb) {
         wmode: 'transparent',
         bgcolor: '#ffffff',
         allowScriptAccess: 'always'
-    }).getApi();
+    }).data('flashembed').getApi();
     JSocket.swfloadedcb = swfloadedcb;
 };
 JSocket.swfloaded = function() {
