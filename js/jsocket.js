@@ -36,7 +36,7 @@ function JSocket() {
 }
 JSocket.VERSION = '0.03';
 JSocket.init = function(src, swfloadedcb) {
-    JSocket.flashapi = $('<div></div>').appendTo('body').flashembed({
+    JSocket.flashapi = $('<div></div>').prependTo('body').flashembed({
         id: 'socketswf',
         name: 'socketswf',
         src: src.concat('?'.concat(JSocket.VERSION)),
