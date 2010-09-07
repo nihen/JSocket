@@ -34,7 +34,7 @@
 function JSocket() {
     this.initialize.apply(this, arguments);
 }
-JSocket.VERSION = '0.04';
+JSocket.VERSION = '0.05';
 JSocket.init = function(src, swfloadedcb) {
     JSocket.flashapi = $('<div id="swfsocketdiv"></div>').prependTo('body').flashembed({
         id: 'socketswf',
@@ -81,8 +81,8 @@ JSocket.errorHandler = function(socid, str) {
     JSocket.handlers[socid].errorHandler(str);
 };
 JSocket.prototype = {
-    initialize: function(handlers) {
-        this.socid    = JSocket.flashapi.newsocket();
+    initialize: function(handlers, newsocketopt) {
+        this.socid    = JSocket.flashapi.newsocket(newsocketopt);
         JSocket.handlers[this.socid] = $.extend(JSocket.defaultHandlers.prototype, handlers);
     },
     connect: function(host, port) {

@@ -1,0 +1,3 @@
+[submodule "submodules/as3crypto_patched"]
+	path = submodules/as3crypto_patched
+	url = git://github.com/nihen/as3crypto_patched.git

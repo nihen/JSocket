@@ -1,0 +1,16 @@
+<flex-config>
+    <target-player>9.0.124</target-player>
+    <output>../swf/JSocketSSL.swf</output>
+    <default-size>
+        <width>1</width>
+        <height>1</height>
+    </default-size>
+    <compiler>
+        <source-path>
+            <path-element>../as/</path-element>
+        </source-path>
+        <include-libraries>
+            <library>../lib/as3crypto.swc</library>
+        </include-libraries>
+    </compiler>
+</flex-config>
