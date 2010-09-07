@@ -24,7 +24,7 @@ package {
             ExternalInterface.call('JSocket.swfloaded');
         }
 
-        public static function newsocket():int {
+        public static function newsocket(dummy:Boolean = false):int {
             var soc:Socket = new Socket();
 
             sockets.push(soc);
